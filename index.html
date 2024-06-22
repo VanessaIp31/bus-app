@@ -6,239 +6,97 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script> -->
   <link rel="stylesheet" href="style.css">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" /> -->
 </head>
 
 <body class="px-5">
-  <div class="header">
-    <div class="logo pt-10">
+  <div id="loading" role="status">
+    <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin fill-red-600"
+      viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+        fill="currentColor" />
+      <path
+        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+        fill="currentFill" />
+    </svg>
+    <span class="sr-only">Loading...</span>
+  </div>
+
+  <div id="header">
+    <div class="logo py-10">
       <img src="KowloonMotorBus.svg.png" width="200px" height="180px" alt="KMBlogo">
     </div>
-    <form class="mx-auto w-full pt-10">
-      <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+    <div id="search-box" class="mx-auto w-full">
+      <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
       <div class="relative">
         <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+          <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
             fill="none" viewBox="0 0 20 20">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
           </svg>
         </div>
-        <input type="search" id="default-search"
-          class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        <input type="text" id="default-search" autocomplete="off" onclick="changeRoute(event)"
+          onkeyup="changeRoute(event)"
+          class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
           placeholder="請輸入路線⋯⋯" required />
-        <button type="submit"
-          class="text-white absolute end-2.5 bottom-2.5 bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">搜尋路線</button>
-        <div class="absolute route-list mt-1">
-          <div
-            class="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white shadow shadow-grey-500/40 hover:shadow-grey-500/40">
-            <button type="button"
-              class="w-full px-4 py-2 font-medium text-left rtl:text-right border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-red-600 focus:outline-none dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
-              <div class="flex items-center">
-                <div class="text-right mr-4 w-10 h-5 rounded-full bg-red-100 flex justify-center">
-                  <span>1</span>
-                </div>
-                <div>
-                  <h3>往尖沙咀碼頭</h3>
-                </div>
-              </div>
-            </button>
-            <button type="button"
-              class="w-full px-4 py-2 font-medium text-left rtl:text-right border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-red-600 focus:outline-none dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
-              <div class="flex items-center">
-                <div class="text-right mr-4 w-10 h-5 rounded-full bg-red-100 flex justify-center">
-                  <span>1</span>
-                </div>
-                <div>
-                  <h3>往竹園邨</h3>
-                </div>
-              </div>
-            </button>
-            <button type="button"
-              class="w-full px-4 py-2 font-medium text-left rtl:text-right border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-red-600 focus:outline-none dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
-              <div class="flex items-center">
-                <div class="text-right mr-4 w-10 h-5 rounded-full bg-red-100 flex justify-center">
-                  <span>1A</span>
-                </div>
-                <div>
-                  <h3>往尖沙咀碼頭</h3>
-                </div>
-              </div>
-            </button>
-            <button type="button"
-              class="w-full px-4 py-2 font-medium text-left rtl:text-right border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-red-600 focus:outline-none dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
-              <div class="flex items-center">
-                <div class="text-right mr-4 w-10 h-5 rounded-full bg-red-100 flex justify-center">
-                  <span>1A</span>
-                </div>
-                <div>
-                  <h3>往中秀茂坪</h3>
-                </div>
-              </div>
-            </button>
-          </div>
-        </div>
+        <div id="route-list"
+          class="absolute w-full max-h-96 overflow-y-auto mt-1 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg shadow shadow-grey-500/40 hover:shadow-grey-500/40"
+          hidden></div>
       </div>
-    </form>
+    </div>
   </div>
 
-  <div class="select-menu mt-5">
+  <div id="select-menu" class="mt-5" hidden>
     <div
-      class="text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full">
-      <button aria-current="true" type="button"
-        class="w-full px-4 py-2 font-medium text-left rtl:text-right text-white bg-red-600 border-b border-gray-200 rounded-t-lg cursor-pointer focus:outline-none dark:bg-gray-800 dark:border-gray-600">
-        請選擇路線
-      </button>
-      <button type="button"
-        class="w-full px-4 py-2 font-medium text-left rtl:text-right border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-red-700 focus:outline-none dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
-        <div class="flex items-center">
-          <div class="text-right mr-4 w-20 h-5 rounded-full bg-yellow-100 flex justify-center">
-            <span>正常班次</span>
-          </div>
-          <div>石排灣 > 中環碼頭</div>
-        </div>
-      </button>
-      <button type="button"
-        class="w-full px-4 py-2 font-medium text-left rtl:text-right border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-red-700 focus:outline-none dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
-        <div class="flex items-center">
-          <div class="text-right mr-4 w-20 h-5 rounded-full bg-red-100 flex justify-center">
-            <span>特別班次</span>
-          </div>
-          <div>石排灣 > 中環碼頭 經置富</div>
-        </div>
-      </button>
-      <button type="button"
-        class="w-full px-4 py-2 font-medium text-left rtl:text-right border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-red-700 focus:outline-none dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
-        <div class="flex items-center">
-          <div class="text-right mr-4 w-20 h-5 rounded-full bg-yellow-100 flex justify-center">
-            <span>正常班次</span>
-          </div>
-          <div>中環碼頭 > 石排灣</div>
-        </div>
-      </button>
-      <button type="button"
-        class="w-full px-4 py-2 font-medium text-left rtl:text-right border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-red-700 focus:outline-none dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
-        <div class="flex items-center">
-          <div class="text-right mr-4 w-20 h-5 rounded-full bg-red-100 flex justify-center">
-            <span>特別班次</span>
-          </div>
-          <div>中環碼頭 > 石排灣 經置富</div>
-        </div>
-      </button>
-    </div>
-    <div class="mt-5">
+      class="text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg w-full">
       <div
-        class="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-        <button type="button" data-modal-target="timeline-modal" data-modal-toggle="timeline-modal"
-          class="w-full px-4 py-2 font-medium text-left rtl:text-right border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-red-700 focus:outline-none dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
-          <div class="flex items-center">
-            <div class="text-right mr-4 w-10 h-5 rounded-full bg-red-100 flex justify-center">
-              <span>1</span>
-            </div>
-            <div>石排灣</div>
-          </div>
-        </button>
-        <button type="button"
-          class="w-full px-4 py-2 font-medium text-left rtl:text-right border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-red-700 focus:outline-none dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
-          <div class="flex items-center">
-            <div class="text-right mr-4 w-10 h-5 rounded-full bg-red-100 flex justify-center">
-              <span>2</span>
-            </div>
-            <div>漁暉道</div>
-          </div>
-        </button>
-        <button type="button"
-          class="w-full px-4 py-2 font-medium text-left rtl:text-right border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-red-700 focus:outline-none dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
-          <div class="flex items-center">
-            <div class="text-right mr-4 w-10 h-5 rounded-full bg-red-100 flex justify-center">
-              <span>3</span>
-            </div>
-            <div>香港仔魚類批發市場</div>
-          </div>
-        </button>
+        class="w-full px-4 py-2 font-medium text-left rtl:text-right text-white bg-red-600 border-b border-gray-200 rounded-t-lg focus:outline-none">
+        請選擇路線
       </div>
+      <div id="dest"
+        class="w-full px-4 py-2 font-medium text-left rtl:text-right bg-gray-200">
+      </div>
+      <div id="dest-service-type-list"></div>
+      <div id="orgin"
+        class="w-full px-4 py-2 font-medium text-left rtl:text-right bg-gray-200">
+      </div>
+      <div id="orgin-service-type-list"></div>
     </div>
+
+    <div id="route-stop-list" hidden
+        class="w-full mt-5 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
+      </div>
   </div>
 
-  <!-- Main modal -->
-  <div id="timeline-modal" tabindex="-1" aria-hidden="true"
-    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div class="relative p-4 w-full max-w-md max-h-full">
-      <!-- Modal content -->
-      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-        <!-- Modal header -->
-        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-          <div>
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-              牛池灣轉車站 - 彩虹站 (K2)
-            </h3>
-            <span class="text-xs text-gray-500 dark:text-white">預計到達時間</span>
-          </div>
-          <button type="button"
-            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-            data-modal-toggle="timeline-modal">
-            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-            </svg>
-            <span class="sr-only">Close modal</span>
-          </button>
+  <div id="timeline-modal" class="modal" style="display: none;">
+    <div class="relative modal-content bg-white p-4 rounded-lg shadow-lg mx-auto">
+      <!-- Modal header -->
+      <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+        <div>
+          <h3 id="stop-name" class="text-lg font-semibold text-gray-900"></h3>
+          <span class="text-xs text-gray-500">預計到達時間</span>
         </div>
-        <!-- Modal body -->
-        <div class="p-4 md:p-5">
-          <ol class="relative border-s border-gray-200 dark:border-gray-600 ms-3.5 mb-4 md:mb-5">
-            <li class="mb-10 ms-8">
-              <span
-                class="absolute flex items-center justify-center w-6 h-6 bg-gray-100 rounded-full -start-3.5 ring-8 ring-white dark:ring-gray-700 dark:bg-gray-600">
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                  stroke="grey" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="lucide lucide-clock">
-                  <circle cx="12" cy="12" r="10" />
-                  <polyline points="12 6 12 12 16 14" />
-                </svg>
-              </span>
-              <div class="flex">
-                <div class="w-1/5 text-lg font-semibold text-gray-800">15:11</div>
-                <div class="px-3 py-1 text-sm font-semibold bg-red-100 text-gray-900 rounded-full">實時班次</div>
-              </div>
-            </li>
-            <li class="mb-10 ms-8">
-              <span
-                class="absolute flex items-center justify-center w-6 h-6 bg-gray-100 rounded-full -start-3.5 ring-8 ring-white dark:ring-gray-700 dark:bg-gray-600">
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                  stroke="grey" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="lucide lucide-clock">
-                  <circle cx="12" cy="12" r="10" />
-                  <polyline points="12 6 12 12 16 14" />
-                </svg>
-              </span>
-              <div class="flex">
-                <div class="w-1/5 text-lg font-semibold text-gray-800">15:25</div>
-                <div class="px-3 py-1 text-sm font-semibold bg-yellow-100 text-gray-900 rounded-full">原定班次</div>
-              </div>
-            </li>
-            <li class="mb-10 ms-8">
-              <span
-                class="absolute flex items-center justify-center w-6 h-6 bg-gray-100 rounded-full -start-3.5 ring-8 ring-white dark:ring-gray-700 dark:bg-gray-600">
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                  stroke="grey" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="lucide lucide-clock">
-                  <circle cx="12" cy="12" r="10" />
-                  <polyline points="12 6 12 12 16 14" />
-                </svg>
-              </span>
-              <div class="flex">
-                <div class="w-1/5 text-lg font-semibold text-gray-800">15:31</div>
-                <div class="px-3 py-1 text-sm font-semibold bg-red-100 text-gray-900 rounded-full">實時班次</div>
-              </div>
-            </li>
-          </ol>
-        </div>
+        <button type="button"
+          class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center"
+          onclick="closeModal()">
+          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+      </div>
+      <!-- Modal body -->
+      <div class="p-4 md:p-5">
+        <ol id="eta-list" class="relative border-s border-gray-200 ms-3.5 mb-4 md:mb-5"></ol>
       </div>
     </div>
   </div>
+  <script src="./script.js" defer></script>
 </body>
 
 </html>
